@@ -7,6 +7,6 @@ session_destroy();
 
 //redirect to index.php
 
-header("location:register.php");
+header("location:index.php");
 
 ?>

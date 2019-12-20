@@ -1,5 +1,6 @@
 <?php 
 	session_start();
+	session_regenerate_id(); //to prevent session fixation
 ?>
 
 <!DOCTYPE html >
@@ -61,7 +62,7 @@
 							<input type="password" name="password" id="icon-pass" placeholder="password" />
 						</div>
 						<div class="remember">
-							<input type="checkbox" id="rem"name="remember" value="true" />
+							<input type="checkbox" id="rem" name="remember_me" value="true" />
 							<label for="rem">remember me</span>
 
 						</div>
@@ -110,6 +111,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])){
 	//initializing input
 	$user='';
 	$password='';
+	
 	$error=array();
 	$count=0;
 
@@ -155,8 +157,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])){
 	else {
 		require 'db_connection.php' ;
 
-
-		$sql="SELECT username ,password FROM users WHERE username= ?";
+		$id="";
+		$sql="SELECT username ,password, user_id FROM users WHERE username= ?";
 
 			$stmt =$conn->prepare($sql);
 
@@ -177,13 +179,22 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])){
 				if($stmt->num_rows >0){
 					
 
-					 $stmt->bind_result($user,$passwordenc);
+					 $stmt->bind_result($user,$passwordenc,$id);
 					if($stmt->fetch()){
 						
 
 						if (md5($password) == $passwordenc){
 							
 							$_SESSION["username"] =$user;
+							$_SESSION["id"] = $id;
+
+							if($_POST["remember_me"]=='1' || $_POST["remember_me"]=='True')
+			                    {
+
+			                    $hour = time() + 3600 * 24 * 30;
+			                    setcookie('username', $user, $hour , '/');
+			                         setcookie('password', $password, $hour ,'/');
+			                    }
 
 							//header("location:home.php"); not working headers already sent
 

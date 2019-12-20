@@ -2,6 +2,7 @@
  <?php 
 
  	 session_start();
+ 	 session_regenerate_id(); //to prevent session fixation
  	  if (!isset($_SESSION['username'])){
  	 		header('location:index.php');
  	 		exit; 
@@ -44,10 +45,13 @@
 		
 		<link rel="apple-touch-icon" href="favicon.ico">  						<!--APPLE FAVICONS -->
 
-
+		<style>
+			
+	
+		</style>
 		
 	</head>
-	<body>
+	<body onload="return share()">
 		<header>
 			<div class="site_name">
 				<h1>flagX</h1>
@@ -71,17 +75,20 @@
 					<section class="info">
 						<div class="empty"></div>
 						<div class="photo">
-							<img src="images/noimage.png" alt="profile picture" title="profile picture" />
-							<h3><?php echo $_SESSION['username'] ;?></h3>
-							<p>web developper</p>
-						</div>
-						<div class="age">
-								<?php	$sql ="SELECT * FROM users";
+						<?php
+						$sessionk=$_SESSION['username'];
+								$sql ="SELECT * FROM users WHERE `users`.`username` = '$sessionk' ";
 									$query=mysqli_query($conn,$sql);
 									$num_of_rows=mysqli_affected_rows($conn);
 									
 										$row=mysqli_fetch_assoc($query);
-										echo "<h3>age</h3>
+								echo "<img src=".$row['picture']." alt='profile picture' title='profile picture' />
+							<h3>". $_SESSION['username'] ."</h3>
+							<p>".$row['job']."</p>
+						</div>
+						<div class='age'>
+							
+										<h3>age</h3>
 												<p>".$row['age']."</p>
 			
 											</div>
@@ -98,49 +105,18 @@
 				</aside>
 												<!-- left side bar end  -->
 												<!-- main section start  -->
-				<main>
+				<main >
 					<section class="first_section">
-						<form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+						<form action="" method="get" id="firstform">
 							<textarea id="aj" name="post" placeholder="What's on your mind?"></textarea>
-							<input type="submit" name="share" value="post" onclick="share()"/>
+							<input type="button" name="share" value="post"
+							 onclick=" return comment()"/>
 						</form>
 					</section>
 
-						<?php	$sql ="SELECT * FROM posts";
-						$query=mysqli_query($conn,$sql);
-						$num_of_rows=mysqli_affected_rows($conn);
+					<article id="main">
 						
-						for ($i=0;$i<$num_of_rows;$i++)
-						{
-							$row=mysqli_fetch_assoc($query);
-
-							echo "
-
-							<section>
-								<div class='post'>
-									<div class='time_post'>
-										<img src='images/noimage.png' alt='profile photo' title='profile photo' />
-										<p class='editp'>".$row['username']."</p>
-										<p>".$row['post_time']."</p>
-									</div>
-									<div class='comment'>
-									".
-									$row['comment']."
-									</div>
-								</div>
-								<div class='likes'>
-									<div class='bt_like'>
-										<button name='like' value='true'><i class='overwride2 fas fa-heart'></i>like</button>
-										<div class='icon'>
-											
-										</div>
-									</div>
-								</div>
-							</section>
-
-							";
-						}
-						?>
+					</article>
 				
 
 					
@@ -155,7 +131,16 @@
 						<a href="edit.php" target="_blank">edit your profile</a>
 					</section>
 					<section class="ads">
-						
+						<div  class="chat_header">
+							<h3>chat</h3>
+						</div>
+						<div id="chat_body" class="chat_body">message</div>
+						<div class="chat_messages">
+							<form action="" method="get" id="secondform">
+								<textarea id="message" name="message"></textarea>
+								<input type="button"  name="send" value="send" onclick="return chat()"/>
+							</form>
+						</div>
 					</section>
 
 				</aside>
@@ -166,74 +151,51 @@
 			<script src="js/jquery.js"></script>
 			<script>
 				
-				function share() {
+				
+				function chat() {
 				  
 				  
-				   var cm= document.getElementById("aj").value ;
+				  var message= document.getElementById("message").value ;
+				  
 				  
 				  var xhttp = new XMLHttpRequest();
 				  xhttp.onreadystatechange = function() {
 				    if (this.readyState == 4 && this.status == 200) {
-				    document.getElementById("comment").innerHTML = this.responseText;
+				    document.getElementById("chat_body").innerHTML = this.responseText;
 				    }
 				  };
-				  xhttp.open("POST", "home.php", true);
-				  xhttp.send();
+				 xhttp.open("GET", "chat.php?message="+message+"&send=send", true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send(); 
+				  document.getElementById('secondform').reset();
 				}
+
+
+				function comment() {
+				  
+				  
+				  var post= document.getElementById("aj").value ;
+				  
+				  
+				  var xhttp = new XMLHttpRequest();
+				  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				    document.getElementById("main").innerHTML = this.responseText;
+				    }
+				  };
+				 xhttp.open("GET", "chat.php?post="+post+"&share=send", true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send(); 
+				  document.getElementById('firstform').reset();
+				}
+
+
+				$(document).ready(function(e) {
+
+					$.ajaxSetup({cache:false});
+					setInterval( function() { $('#main').load('logs.php'); }, 500);
+				});
 			</script>
 	</body>
 </html>
 
-<?php 
-		
-		
-
-		if (isset($_POST['share'])){
-
-				// validation function
-				function test_input ($data){
-
-				$data=trim($data);
-				$data=strip_tags($data);
-				$data=htmlspecialchars($data);
-				return $data;
-
-				}
-
-				if (!empty($_POST['post'])){
-					$user_post=test_input($_POST['post']);
-				}
-						
-				$date=date("F d, Y h:i:s A");
-
-				
-
-				$sql="INSERT INTO posts (comment ,post_time,username) 
-	 		 	VALUES (? ,?,?)";
-
-	 			if($stmt = $conn->prepare($sql)){
-
-		 			$stmt->bind_param('sss',$user_post,$date,$_SESSION['username']);
-		 			
-
-		 			$stmt->execute();
-					
-					
-				} else {
-						// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
-						echo 'Could not prepare statement!';
-				}
-
-		 			//close connection
-		 			$stmt->close();
-		 			$conn->close();	
-		}
-
-
-		
-
-		
-
-		
-
-?>

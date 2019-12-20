@@ -1,6 +1,7 @@
 
 <?php 
 	session_start();
+	session_regenerate_id(); //to prevent session fixation
 	if (!isset($_SESSION['username'])){
 		header('location:index.php');
 		exit;
@@ -18,6 +19,11 @@
 		<meta name="robots" content="noindex,nofollow" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
+		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+		
+		<link rel="apple-touch-icon" href="favicon.ico">  				<!--APPLE FAVICONS -->
+
 								<!--page style-->
 		<style>
 			
@@ -30,6 +36,12 @@
 				color:#fff;
 				width:150px;
 				padding:15px 0 15px 20px;
+				
+
+			}
+			label {
+				cursor:pointer;
+				
 
 			}
 			form input {
@@ -38,6 +50,19 @@
 				height:50%;
 				margin-left:40px;
 				padding-left:10px;
+
+			}
+			form input[type='submit']{
+
+				margin-left:40%;
+			}
+			form select {
+
+				width:20%;
+				height:50%;
+				margin-left:10px;
+				padding-left:10px;
+				cursor:pointer;
 			}
 			.no_margin {
 
@@ -60,6 +85,7 @@
 				text-transform:capitalize;
 			}
 
+
 		</style>
 
 	</head>
@@ -78,16 +104,28 @@
 					</div>
 					<div class="design">
 						<label for="rel">update your martial status:</label>
-						<input type="text" class="no_margin" id="rel" name="relationship" placeholder=" your martial status" />
+						<select id="rel" name="relationship">
+							<option value="none">your martial status</option>
+							<option value="single">single</option>
+							<option value="married">Married</option>
+							<option value="divorsed">divorsed</option>
+							<option value="in a relationship">In a relationship</option>
+						</select>
+						
 					</div>
 					<div class="design">
 						<label for="age">update your age:</label>
 						<input type="number" class="extra_margin" id="age" name="age" placeholder=" your age" />
 					</div>
 					<div class="design">
+						<label for="job">update your job:</label>
+						<input type="text"  class="extra_margin" id="job" name="job" placeholder=" your job" />
+					</div>
+					<div class="design">
 						<label for="pic">update your profile picture:
 						</label>
 						<input type="file" id="pic" name="image" />
+						<br/><br/>
 						<input type="submit"  name="update" value="update" />
 					<div>
 				</fieldset>
@@ -105,7 +143,9 @@
 
 	if(isset($_POST['update'])){
 
+
 		//define variables
+		$sessionk=$_SESSION['username'];
 		$image=$new_name=$new_pass=$new_gender=$age=$relationship='';
 
 		require 'db_connection.php';
@@ -124,7 +164,7 @@
 		$count=0;
 
 		
-		if (!empty($_FILES['image'])){
+		if (file_exists($_FILES['image']['tmp_name'])){
 				//image variables
 			$image_name=$_FILES['image']['name'];
 			$image_type=$_FILES['image']['type'];
@@ -156,7 +196,7 @@
 					}
 
 					$picture_store="usersimages\\\\".$image;
-	 			 $sql="UPDATE `users` SET `picture` = '$picture_store' WHERE `users`.`user_id` = 14";
+	 			 $sql="UPDATE `users` SET `picture` = '$picture_store' WHERE `users`.`username` ='$sessionk'";
 
 	 			if($stmt = $conn->prepare($sql)){
 
@@ -185,7 +225,7 @@
 			$new_name=test_input($_POST['newname']);
 
 
-			$sql="UPDATE `users` SET `username` = '$new_name' WHERE `users`.`user_id` = 14";
+			$sql="UPDATE `users` SET `username` = '$new_name' WHERE `users`.`username` ='$sessionk'";
 
 		
 
@@ -205,7 +245,7 @@
 			$new_pass=test_input($_POST['newpass']);
 
 
-			$sql="UPDATE `users` SET `password` = '$new_pass' WHERE `users`.`user_id` = 14";
+			$sql="UPDATE `users` SET `password` = '$new_pass' WHERE `users`.`username` ='$sessionk'";
 
 		
 
@@ -226,7 +266,7 @@
 
 			//prepare and bind
 
-	 		 $sql="UPDATE `users` SET `age` = '$age' WHERE `users`.`user_id` = 14";
+	 		 $sql="UPDATE `users` SET `age` = '$age' WHERE `users`.`username` ='$sessionk'";
 
 	 			if($stmt = $conn->prepare($sql)){
 
@@ -254,7 +294,7 @@
 
 			//prepare and bind
 
-	 		 $sql="UPDATE `users` SET `relationship` = '$relationship' WHERE `users`.`user_id` = 14";
+	 		 $sql="UPDATE `users` SET `relationship` = '$relationship' WHERE `users`.`username` ='$sessionk'";
 
 	 			if($stmt = $conn->prepare($sql)){
 
@@ -276,8 +316,33 @@
 			}
 				
 	
+			//update work
+			if (!empty($_POST['job'])){
+
+			$work=test_input($_POST['job']);
 
 
+			//prepare and bind
+
+	 		 $sql="UPDATE `users` SET `job` = '$work' WHERE `users`.`username` ='$sessionk'";
+
+	 			if($stmt = $conn->prepare($sql)){
+
+		 	
+		 			if(!$stmt->execute()){
+					
+				
+						echo "<script>alert('coudnt insert job')</script>";
+						$count++;
+					}
+					
+				} else {
+						// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
+						echo 'Could not prepare statement!';
+				}
+
+		
+			}
 			mysqli_close($conn);
 
 			if ($count ==0){
@@ -285,5 +350,5 @@
 			}
 	}
 
-
+ 	
 ?>

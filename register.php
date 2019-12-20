@@ -1,4 +1,4 @@
-<?php ;?>
+
 
 <html>
 	<head lang="en-us">
@@ -279,12 +279,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 								
 							 $_SESSION["username"] = $row['username'];
 							 $_SESSION["id"] = $row['user_id'];
-							 echo $_SESSION['username'];
-							 echo $_SESSION['id'];
-							echo $row['username'];
-							echo $row['user_id'];
+							
 
-						//echo "<script>window.location='index.php';</script>";
+						echo "<script>window.location='index.php';</script>";
 					}
 					else {
 						echo "coudnt execute";

@@ -11,6 +11,11 @@
 		<meta name="robots" content="noindex,nofollow" />
 		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
+		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+		
+		<link rel="apple-touch-icon" href="favicon.ico">  				<!--APPLE FAVICONS -->
+
 								<!--page style-->
 		<style>
 			
@@ -113,12 +118,11 @@
 
 					$message = "
 					<html>
-					<head>
-
-					</head>
 					<body>
-						HI xxxxxxxx 
-						your password is 
+						<h1>HI xxxxxxxx </h1>
+						<p>we are very sorry that you forget your password .</p>
+
+						 <p>your password is </p>
 
 
 					</body>
@@ -134,6 +138,7 @@
 					$headers .= 'Cc: myboss@example.com' . "\r\n";
 
 					//mail($to,$subject,$message,$headers);
+					//no smtp server in localhost
 					echo "sent please check your email";
 					sleep(5);
 					header('location:index.php');

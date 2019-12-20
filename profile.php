@@ -3,6 +3,7 @@
  <?php 
 
  	 session_start();
+ 	 session_regenerate_id(); 
  	  if (!isset($_SESSION['username'])){
  	 		header('location:index.php');
  	 		exit; 
@@ -45,7 +46,9 @@
 		
 		<link rel="apple-touch-icon" href="favicon.ico">  						<!--APPLE FAVICONS -->
 
-
+		<style>
+		
+		</style>
 		
 	</head>
 	<body>
@@ -66,25 +69,29 @@
 			</nav>
 		</header>
 		<div class="contain">
+			<div class="wallpaper">
+				
+			</div>
 				<div class="wrapper">
 											<!-- left side bar start -->
 				<aside class="left">
 					<section class="info">
 						<div class="empty"></div>
 						<div class="photo">
-							<img src="images/noimage.png" alt="profile picture" title="profile picture" />
-							<h3><?php echo $_SESSION['username'] ;?></h3>
-							<p>web developper</p>
-						</div>
-						<div class="age">
-								<?php	
-									$store=$_SESSION['username'];
-								$sql ="SELECT * FROM users ";
+								<?php
+						$sessionk=$_SESSION['username'];
+								$sql ="SELECT * FROM users WHERE `users`.`username` = '$sessionk'";
 									$query=mysqli_query($conn,$sql);
 									$num_of_rows=mysqli_affected_rows($conn);
 									
-										$row=mysqli_fetch_array($query);
-										echo "<h3>age</h3>
+										$row=mysqli_fetch_assoc($query);
+								echo "<img src=".$row['picture']." alt='profile picture' title='profile picture' />
+							<h3>". $_SESSION['username'] ."</h3>
+							<p>".$row['job']."</p>
+						</div>
+						<div class='age'>
+							
+										<h3>age</h3>
 												<p>".$row['age']."</p>
 			
 											</div>
@@ -106,7 +113,7 @@
 
 						<?php	
 						
-						$sql ="SELECT * FROM posts WHERE username='zizi'";
+						$sql ="SELECT * FROM posts WHERE username='$sessionk'";
 						$query=mysqli_query($conn,$sql);
 						$num_of_rows=mysqli_affected_rows($conn);
 						
@@ -119,8 +126,9 @@
 							<section>
 								<div class='post'>
 									<div class='time_post'>
-										<img src='images/noimage.png' alt='profile photo' title='profile photo' />
-										<span>".$row['post_time']."</span>
+										<img src='images/download.png' alt='profile photo' title='profile photo' />
+										<p class='editp'>".$row['username']."</p>
+										<p class='edittime'>".$row['post_time']."</p>
 									</div>
 									<div class='comment'>
 									".
