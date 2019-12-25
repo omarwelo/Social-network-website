@@ -89,6 +89,7 @@
 
 
 		if ($count >0){
+			echo"error";
 			exit();
 		}
 
@@ -112,34 +113,35 @@
 						exit();
 			 	} 
 			 	else {
+			 		echo "sent please check your email";
 			 		echo $row['password'];
-			 		$to = $email;
-					$subject = "Flagx recovery Password";
+			 	// 	$to = $email;
+					// $subject = "Flagx recovery Password";
 
-					$message = "
-					<html>
-					<body>
-						<h1>HI xxxxxxxx </h1>
-						<p>we are very sorry that you forget your password .</p>
+					// $message = "
+					// <html>
+					// <body>
+					// 	<h1>HI xxxxxxxx </h1>
+					// 	<p>we are very sorry that you forget your password .</p>
 
-						 <p>your password is </p>
+					// 	 <p>your password is </p>
 
 
-					</body>
-					</html>
-					";
+					// </body>
+					// </html>
+					// ";
 
-					// Always set content-type when sending HTML email
-					$headers = "MIME-Version: 1.0" . "\r\n";
-					$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+					// // Always set content-type when sending HTML email
+					// $headers = "MIME-Version: 1.0" . "\r\n";
+					// $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-					// More headers
-					$headers .= 'From: <omarwhadidi@hotmail.com>' . "\r\n";
-					$headers .= 'Cc: myboss@example.com' . "\r\n";
+					// // More headers
+					// $headers .= 'From: <omarwhadidi@hotmail.com>' . "\r\n";
+					// $headers .= 'Cc: myboss@example.com' . "\r\n";
 
 					//mail($to,$subject,$message,$headers);
 					//no smtp server in localhost
-					echo "sent please check your email";
+					
 					sleep(5);
 					header('location:index.php');
 			 	}

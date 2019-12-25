@@ -57,9 +57,9 @@
 				<h1>flagX</h1>
 			</div>
 			<div class="search">
-				<form method="post" action="">
-					<input type="text" name="serch" placeholder="search..." />
-					<button type="submit"><i  class="overwride fas fa-search"></i></button>
+				<form id='sform' method="get" action="">
+					<input type="text" id='search' name="search" placeholder="search..." autocomplete="off" onkeyup="usearch()"/>
+					<input type='button' /><i  class="overwride fas fa-search"></i>
 				</form>
 			</div>
 			<nav>
@@ -69,7 +69,8 @@
 			</nav>
 		</header>
 		<div class="contain">
-			<div class="wallpaper">
+			<div id="result">rtn</div>
+			<div class="wallpaper" style="background-image: url('images/cover.jpg');">
 				
 			</div>
 				<div class="wrapper">
@@ -103,7 +104,7 @@
 					</section>
 
 					<section class="ads">
-						
+						<span>google ads</span>
 					</section>
 				</aside>
 												<!-- left side bar end  -->
@@ -113,7 +114,7 @@
 
 						<?php	
 						
-						$sql ="SELECT * FROM posts WHERE username='$sessionk'";
+						$sql ="SELECT * FROM posts WHERE username='$sessionk' ORDER BY post_time DESC";
 						$query=mysqli_query($conn,$sql);
 						$num_of_rows=mysqli_affected_rows($conn);
 						
@@ -161,8 +162,10 @@
 						<p>to flagx</p>
 						<a href="edit.php" target="_blank">edit your profile</a>
 					</section>
-					<section class="ads">
-						
+					<section class="game ads">
+						<h4>Entertainment</h4>
+						<p>flagx is conserned about it's users ; thus we assure you with  quality and up to date services. Our games will keep you entertained , Whether your preferences or passion for any other game are , we promise interesting perspectives on life and society.</p>
+						<a href='game.php' target='_blank'>play a game </a>
 					</section>
 
 				</aside>
@@ -171,6 +174,33 @@
 
 			<script src="js/all.js" ></script>						<!--fontawesome js file -->
 			<script src="js/jquery.js"></script>
+			<script>
+				
+				function usearch() {
+				  
+				  
+				  var search= document.getElementById("search").value ;
+
+				  
+					  if (search == ''){
+					  	document.getElementById("result").style.display='none' ;
+					  }
+					  else {
+					  	document.getElementById("result").style.display='block' ;
+					  	var xhttp = new XMLHttpRequest();
+					  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				    document.getElementById("result").innerHTML = this.responseText;
+				    }
+				  };
+				 xhttp.open("GET", "search.php?search="+search, true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send(); 
+				  //document.getElementById('sform').reset();
+					  }
+				  
+				}
+			</script>
 	</body>
 </html>
 

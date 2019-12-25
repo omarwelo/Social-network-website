@@ -1,9 +1,14 @@
 <?php 
 	session_start();
 	session_regenerate_id(); //to prevent session fixation
+	 if(!empty($_COOKIE['fusername'])) 
+	 	{ 
+	 		$_SESSION['username']==$_COOKIE['username'];
+	 		header('location:home.php');} 
+	 
 ?>
 
-<!DOCTYPE html >
+
 <html>
 	<head lang="en-us">
 		<title>social</title>
@@ -49,25 +54,25 @@
 				<div class="content"> 
 					<div id="pop" class="popup_error"></div>
 					<h2>login to your account</h2>
-					<form class="login-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+					<form class="login-form" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="validateuser">
 						<div class="cont">
 							<div class="log_icon"> <i class="fa fa-user" aria-hidden="true"></i></div>
 							<div class="error"> <i id="jsuser" class="fas fa-asterisk " aria-hidden="true"></i></div>
 
-							<input type="text" name="username" id="icon-name" placeholder="username"  autocomplete="off" />
+							<input type="text" name="username" id="icon_name" class='vlog' placeholder="username"  autocomplete="off" required="required" />
 						</div>
 						<div class="cont">
 							<div class="pass_icon"> <i class="fa fa-unlock-alt" aria-hidden="true"></i></div>
 							<div class="errorp"> <i id="jspass" class="fas fa-asterisk " aria-hidden="true"></i></div>
-							<input type="password" name="password" id="icon-pass" placeholder="password" />
+							<input type="password" name="password" id="icon_pass" placeholder="password" required="required" />
 						</div>
 						<div class="remember">
-							<input type="checkbox" id="rem" name="remember_me" value="true" />
+							<input type="checkbox" id="rem" name="remember_me" value="True" />
 							<label for="rem">remember me</span>
 
 						</div>
 						
-						<input type="submit" class="lg" name="login" value="login" />
+						<input type="submit" class="lg" name="login" value="login" id='loguser' />
 						<a class="redirect" href="register.php" >register</a>
 
 					</form>
@@ -82,7 +87,36 @@
 			<script src="js/jquery.js"></script>
 			<script src="js/typed.min.js"></script>
 			<script src="js/main.js" ></script>
-			<script type="text/javascript">
+			<script >
+
+				document.getElementById("validateuser").addEventListener("submit", function(event){
+				  
+				  	var uname = document.getElementById("icon_name").value;
+				  	var upass = document.getElementById("icon_pass").value;
+				  	
+				  	var count=0;
+					
+					if (uname==''){
+
+						document.getElementById('jsuser').style.color='#E4324C';
+						count++;
+					}
+					
+					if (upass==''){
+
+						document.getElementById('jspass').style.color='#E4324C';
+						count++;
+					}
+					
+					if (count >0){
+						event.preventDefault();
+					}
+					
+
+				});
+
+
+			
 				
 				var typed = new Typed('.typed', {
 				  strings: ["welcome pentesters ..." ],
@@ -145,6 +179,15 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])){
 		 $count++;
 		 echo "<script>document.getElementById('jspass').style.color='#E4324C';</script>";
 	}
+	if (!empty($_POST["remember_me"])){
+		$remember=test_input($_POST["remember_me"]);
+		
+
+	}
+	else {
+		 $remember='';
+		 
+	}
 
 	//showing errors
 
@@ -188,12 +231,12 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])){
 							$_SESSION["username"] =$user;
 							$_SESSION["id"] = $id;
 
-							if($_POST["remember_me"]=='1' || $_POST["remember_me"]=='True')
+							if($remember=='1' || $remember=='True')
 			                    {
 
 			                    $hour = time() + 3600 * 24 * 30;
-			                    setcookie('username', $user, $hour , '/');
-			                         setcookie('password', $password, $hour ,'/');
+			                    	setcookie('fusername', $user, $hour , '/');
+			                         setcookie('fpassword', $password, $hour ,'/');
 			                    }
 
 							//header("location:home.php"); not working headers already sent
@@ -238,3 +281,4 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['login'])){
 	}//end slashe of error
 
 } //end slash of submit 
+?>

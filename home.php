@@ -3,9 +3,11 @@
 
  	 session_start();
  	 session_regenerate_id(); //to prevent session fixation
- 	  if (!isset($_SESSION['username'])){
+ 	
+
+ 	  if (!isset($_SESSION['username']) ){
  	 		header('location:index.php');
- 	 		exit; 
+ 	 		exit(); 
  	 		/*use exit or die to stop executing the page  
  	 		  because if i use curl <url> command it will display the page
  	 		  so to prevent that use exit or die after the redirect */
@@ -51,15 +53,15 @@
 		</style>
 		
 	</head>
-	<body onload="return share()">
+	<body >
 		<header>
 			<div class="site_name">
 				<h1>flagX</h1>
 			</div>
 			<div class="search">
-				<form method="post" action="">
-					<input type="text" name="serch" placeholder="search..." />
-					<button type="submit"><i  class="overwride fas fa-search"></i></button>
+				<form id='sform' method="get" action="">
+					<input type="text" id='search' name="search" placeholder="search..." autocomplete="off" onkeyup="usearch()"/>
+					<input type='button' /><i  class="overwride fas fa-search"></i>
 				</form>
 			</div>
 			<nav>
@@ -68,7 +70,9 @@
 				<li><a href="logout.php" target="_self">logout</a></li>
 			</nav>
 		</header>
+		
 		<div class="contain">
+			<div id="result"></div>
 				<div class="wrapper">
 											<!-- left side bar start -->
 				<aside class="left">
@@ -100,7 +104,7 @@
 					</section>
 
 					<section class="ads">
-						
+						<span>google ads</span>
 					</section>
 				</aside>
 												<!-- left side bar end  -->
@@ -151,13 +155,26 @@
 			<script src="js/jquery.js"></script>
 			<script>
 				
-				
+					/*function like (){
+						var like=document.getElementById('lk').value;
+						
+						var xhttp = new XMLHttpRequest();
+				 		 xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				   		 document.getElementById("nblike").innerHTML = this.responseText;
+				   			 }
+				  };
+					 xhttp.open("GET", "chat.php?like="+like, true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send(); 
+
+							}*/
 				function chat() {
 				  
 				  
 				  var message= document.getElementById("message").value ;
 				  
-				  
+				 
 				  var xhttp = new XMLHttpRequest();
 				  xhttp.onreadystatechange = function() {
 				    if (this.readyState == 4 && this.status == 200) {
@@ -186,7 +203,33 @@
 				 xhttp.open("GET", "chat.php?post="+post+"&share=send", true);
 				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 				  xhttp.send(); 
-				  document.getElementById('firstform').reset();
+				  document.getElementById('message').reset();
+				}
+
+
+				function usearch() {
+				  
+				  
+				  var search= document.getElementById("search").value ;
+
+				  
+					  if (search == ''){
+					  	document.getElementById("result").style.display='none' ;
+					  }
+					  else {
+					  	document.getElementById("result").style.display='block' ;
+					  	var xhttp = new XMLHttpRequest();
+					  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				    document.getElementById("result").innerHTML = this.responseText;
+				    }
+				  };
+				 xhttp.open("GET", "search.php?search="+search, true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send(); 
+				  //document.getElementById('sform').reset();
+					  }
+				  
 				}
 
 
@@ -194,8 +237,28 @@
 
 					$.ajaxSetup({cache:false});
 					setInterval( function() { $('#main').load('logs.php'); }, 500);
-				});
+					setInterval( function() { $('#chat_body').load('logs_chat.php'); }, 500);
+
+					
+				
+					});
+				
+
 			</script>
 	</body>
 </html>
 
+<?php 
+
+
+
+
+
+
+	
+
+
+
+
+
+?>

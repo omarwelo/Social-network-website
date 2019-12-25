@@ -1,5 +1,8 @@
 
-
+<?php 
+@ob_start();
+session_start();
+?>
 <html>
 	<head lang="en-us">
 		<title>social</title>
@@ -46,22 +49,34 @@
 				<div class="content" id="remove-padding"> 
 					<div id="pop" class="popup_error"></div>
 					<h2>register</h2>
-					<form class="login-form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+					<form class="login-form" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" id="register_val">
 						<div class="cont"> 
-							<div class="error"> <i id="jsuser" class="fas fa-asterisk" aria-hidden="true"></i></div>
-							<input type="text" name="username" placeholder="username"  autocomplete="off"/>
+							<div class="error"> 
+								<i id="jsuser" class="fas fa-asterisk" aria-hidden="true"></i>
+								
+							</div>
+							<div id='checknn' class="checkn"> 
+								
+								
+							</div>
+							<input type="text" name="username" id="unn" placeholder="username"  autocomplete="off" required="required" onkeyup="return checkname()" />
 						</div> 
 						<div class="cont"> 
 							<div class="error"> <i id="jspass" class="fas fa-asterisk" aria-hidden="true"></i></div>
-							<input type="password" name="password"  placeholder="password"  	/>
+							<input type="password" name="password" id="upp" placeholder="password"  	required="required"/>
 						</div>
 						<div class="cont"> 
 							<div class="error"> <i id="jspass2" class="fas fa-asterisk" aria-hidden="true"></i></div>
-							<input type="password" name="password2"  placeholder="re-enter your password"   />
+							<input type="password" name="password2" id="upp2"  placeholder="re-enter your password"  required="required" />
 						</div>
 						<div class="cont"> 
-							<div class="error"> <i id="jsemail" class="fas fa-asterisk" aria-hidden="true"></i></div>
-							<input type="email" name="email" placeholder="email" autocomplete="off"   />
+							<div class="error"> 
+								<i id="jsemail" class="fas fa-asterisk" aria-hidden="true"></i></div>
+								<div id='checkmm' class="checkn"> 
+								
+								
+							</div>
+							<input type="email" name="email" id="umail" placeholder="email" autocomplete="off"   required="required" onkeyup="return checkmail()" />
 						</div>
 						<div class="remember">
 							<label for="ma">male</label>
@@ -72,7 +87,7 @@
 
 						</div>
 						
-						<input type="submit" id="reg-page" name="register" value="register" />
+						<input type="submit" id="reg_page" name="register" value="register" />
 						
 
 					</form>
@@ -86,8 +101,108 @@
 			<script src="js/all.js" ></script>						<!--fontawesome js file -->
 			<script src="js/jquery.js"></script>
 			<script src="js/typed.min.js"></script>
-			<script src="js/main.js" ></script>
+			<script type="text/javascript" src="js/main.js" ></script>
 			<script type="text/javascript">
+
+				function checkname() {
+				  
+				  
+				  var secondname= document.getElementById("unn").value ;
+
+				  
+					  if (secondname == ''){
+					  	document.getElementById("jsuser").style.color='#E4324C' ;
+					  	document.getElementById("checknn").style.visibility='hidden' ;
+					  }
+					  else {
+					  	document.getElementById("jsuser").style.color='#435160' ;
+					  	document.getElementById("checknn").style.visibility='visible' ;
+					  	
+					  	var xhttp = new XMLHttpRequest();
+					  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				    document.getElementById("checknn").innerHTML = this.responseText;
+				    }
+				  };
+				 xhttp.open("POST", "search.php", true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send("username="+secondname); 
+				  //document.getElementById('sform').reset();
+					  }
+				  
+				}
+
+				function checkmail() {
+				  
+				  
+				  var secondmail= document.getElementById("umail").value ;
+
+				  
+					  if (secondmail == ''){
+					  	document.getElementById("jsemail").style.color='#E4324C' ;
+					  	document.getElementById("checkmm").style.visibility='hidden' ;
+					  }
+					  else {
+					  	document.getElementById("jsemail").style.color='#435160' ;
+					  	document.getElementById("checkmm").style.visibility='visible' ;
+					  	
+					  	var xhttp = new XMLHttpRequest();
+					  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				    document.getElementById("checkmm").innerHTML = this.responseText;
+				    }
+				  };
+				 xhttp.open("POST", "search.php", true);
+				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+				  xhttp.send("email="+secondmail); 
+				  //document.getElementById('sform').reset();
+					  }
+				  
+				}
+
+
+
+				
+				document.getElementById("register_val").addEventListener("submit", function(event){
+				  
+				  	var runame = document.getElementById("unn").value;
+				  	var rupass = document.getElementById("upp").value;
+				  	var rupass2 = document.getElementById("upp2").value;
+				  	var ruemail = document.getElementById("umail").value;
+				  	var count=0;
+				  	
+					
+					if (runame==''){
+
+						document.getElementById('jsuser').style.color='#E4324C';
+						count++;
+					}
+					
+					if (rupass==''){
+
+						document.getElementById('jspass').style.color='#E4324C';
+						count++;
+					}
+					
+					if (rupass2==''){
+
+						document.getElementById('jspass2').style.color='#E4324C';
+						count++;
+					}
+					
+					if (ruemail==''){
+
+						document.getElementById('jsemail').style.color='#E4324C';
+						count++;
+					}
+					
+					if (count >0){
+						event.preventDefault();
+					}
+
+				});
+				
+				
 				
 				var typed = new Typed('.typed', {
 				  strings: ["welcome pentesters ..." ],
@@ -155,7 +270,8 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 				// Store the result so we can check if the account exists in the database.
 				if ($num_of_rows > 0) {
 						// Username already exists
-					echo 'Username exists, please choose another!';
+					echo "<script>alert('Username exists, please choose another!')</script>";
+					$count++;
 						
 			 	} 
 			  $stmt->close();
@@ -186,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 			// }
 		
 				$password=test_input($_POST['password']);
-				$password=md5($password);
+				
 			
 
 		
@@ -202,12 +318,12 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 	else {
 
 		$password2=test_input($_POST['password2']);
-		$password2=md5($password2);
+		
 		
 	}
 	if ($password !== $password2){
 
-		$error[0]= "password does'nt match";
+		$error[4]= "password does'nt match";
 		$count++;
 		
 	}
@@ -219,13 +335,39 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 		echo "<script>document.getElementById('jsemail').style.color='#E4324C';</script>";
 	}
 	else {
-		$email=test_input($_POST['email']);
+		
 			
+		
+		$email=test_input($_POST['email']);
 		if (!filter_var($email , FILTER_VALIDATE_EMAIL)){
 			$error[2]= "please enter a valid email ";
 			$count++;
 			
 		}
+
+		$sql="SELECT * FROM users WHERE email = '$email' ";
+
+			if ($stmt = $conn->prepare($sql)) {
+			// Bind parameters (s = string, i = int, b = blob, etc), hash the password using the PHP password_hash function.
+			
+		 		$query=mysqli_query($conn,$sql);
+				$num_of_rows=mysqli_affected_rows($conn);					
+				$row=mysqli_fetch_assoc($query);
+		 		//$stmt->store_result();
+				// Store the result so we can check if the account exists in the database.
+				if ($num_of_rows > 0) {
+						// Username already exists
+					echo "<script>alert('email exists, please choose another!')</script>";
+					$count++;
+				}
+				$stmt->close();
+
+		 	} else {
+			 	// Something is wrong with the sql statement, check to make sure accounts table exists with all 3 fields.
+			 	echo 'Could not prepare statement!';
+			 }
+			
+						
 		
 	}
 	if (empty($_POST['gender'])){
@@ -254,7 +396,9 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 		 }
 	}
 	else {
+		$password=md5($password);
 		
+		$password2=md5($password2);
 		
 	 	//prepare and bind
 
@@ -275,7 +419,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 								$queryy=mysqli_query($conn,$q);
 								$num_of_rowss=mysqli_affected_rows($conn);
 								$row=mysqli_fetch_assoc($queryy);
-								session_start();
+							
 								
 							 $_SESSION["username"] = $row['username'];
 							 $_SESSION["id"] = $row['user_id'];

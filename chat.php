@@ -50,7 +50,7 @@ session_regenerate_id(); //to prevent session fixation
 		 			
 		 ////////////////////////////////////////////////////////////////////////////
 
-		 			$sql ="SELECT * FROM posts";
+		 			$sql ="SELECT * FROM posts ORDER BY post_time DESC";
 						$query=mysqli_query($conn,$sql);
 						$num_of_rows=mysqli_affected_rows($conn);
 						
@@ -74,7 +74,8 @@ session_regenerate_id(); //to prevent session fixation
 								</div>
 								<div class='likes'>
 									<div class='bt_like'>
-										<button name='like' value='true'><i class='overwride2 fas fa-heart'></i>like</button>
+										<button 
+										type='submit' formmethod='get' formaction='chat.php' name='like' id='lk' value='true'><i class='overwride2 fas fa-heart'></i>like</button><span id='nblike'></span>
 										<div class='icon'>
 											
 										</div>
@@ -133,18 +134,26 @@ session_regenerate_id(); //to prevent session fixation
 
 		 								//ORDER BY message_date
 
-		 			$q ="SELECT * FROM chat ";
+		 			$q ="SELECT * FROM chat ORDER BY message_date DESC";
 								$query=mysqli_query($conn,$q);
 								$num_of_rows=mysqli_affected_rows($conn);
 									
 								
 								for ($i=0;$i<$num_of_rows;$i++){
 									$row=mysqli_fetch_assoc($query);
-					echo "<P><span >".$_SESSION['username'].":</span>".$row['message']."<p style='text-align:right;font-size:16px;color:#000'>".$row['message_date']."</p></p>";
+					echo "<P><span >".$row['username'].":</span>".$row['message']."<p style='text-align:right;font-size:16px;color:#000'>".$row['message_date']."</p></p>";
 
 								}
 
 		}
+
+		if ($_GET['like']){
+
+
+			header('location:index.php');
+		}
+
+		
 		 			
 		$conn->close();
 

@@ -2,7 +2,7 @@
 <?php 
 			//used to load all posts when using ajax without clicking submit button
 				require 'db_connection.php';
-					$sql ="SELECT * FROM posts";
+					$sql ="SELECT * FROM posts ORDER BY post_time DESC";
 						$query=mysqli_query($conn,$sql);
 						$num_of_rows=mysqli_affected_rows($conn);
 						
@@ -26,7 +26,7 @@
 								</div>
 								<div class='likes'>
 									<div class='bt_like'>
-										<button name='like' value='true'><i class='overwride2 fas fa-heart'></i>like</button>
+										<button type='submit' formmethod='get' formaction='chat.php' id='lk' name='like' value='true'><i class='overwride2 fas fa-heart'></i>like</button><span id='nblike'></span>
 										<div class='icon'>
 											
 										</div>
@@ -37,4 +37,10 @@
 							";
 						}
 
+
+
 						?>
+
+			<script>
+			
+			</script>
