@@ -1,6 +1,7 @@
 <?php 
-	session_start();
-	session_regenerate_id(); //to prevent session fixation
+@ob_start();
+session_start();
+session_regenerate_id(); //to prevent session fixation
 	 if(!empty($_COOKIE['fusername'])) 
 	 	{ 
 	 		$_SESSION['username']==$_COOKIE['username'];

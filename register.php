@@ -1,4 +1,3 @@
-
 <?php 
 @ob_start();
 session_start();
@@ -159,9 +158,72 @@ session_start();
 					  }
 				  
 				}
+			
+				document.getElementById('upp').addEventListener("keyup",function (event){
 
 
+					var passlen=document.getElementById('upp');
+					var strongRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{12,})");
+					var mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{8,})");
 
+					/*/^(?=.*\d)          // should contain at least one digit
+ 					 (?=.*[a-z])       // should contain at least one lower case
+ 					 (?=.*[A-Z])       // should contain at least one upper case
+  					[a-zA-Z0-9]{8,} $/  // should contain at least 8 from the mentioned characters*/
+  					
+  					
+  					if(strongRegex.test(passlen.value)) {
+  						passlen.style.borderBottom='1px solid #1FCE6D';
+  						document.getElementById('jspass').style.color='#1FCE6D';
+  					}
+  					else if(mediumRegex.test(passlen.value)){
+  						passlen.style.borderBottom='1px solid yellow';
+  						document.getElementById('jspass').style.color='#435160';
+  					}
+  					else if(passlen.value ==''){
+  						passlen.style.borderBottom='1px solid #E4324C';
+  						document.getElementById('jspass').style.color='#435160';
+  					}
+  					else {
+  						passlen.style.borderBottom='1px solid red';
+  						document.getElementById('jspass').style.color='#435160';
+  					}
+
+					// if(passlen.value.lenght < 8){
+					// 	passlen.style.borderBottom='1px solid blue';
+					// }
+					//  if(passlen.value.lenght > 8 && passlen.value.lenght < 12){
+					// 		passlen.style.borderBottom='1px solid yellow';
+					// }
+					// if(passlen.value.lenght > 12) {
+					// 	passlen.style.borderBottom='1px solid #1FCE6D';
+					// }
+				});
+			
+		
+				document.getElementById('upp2').addEventListener("keyup",function (event){
+
+					var rupass = document.getElementById("upp");
+				  	var rupass2 = document.getElementById("upp2");
+
+				  	if (rupass2.value == rupass.value &&rupass2.value !==''){
+				  		rupass2.style.borderBottom ='1px solid #1FCE6D';
+				  		document.getElementById('jspass2').style.color='#1FCE6D';
+
+				  	}else if (rupass2.value ==''){
+				  		rupass2.style.borderBottom='1px solid #435160';
+				  		document.getElementById('jspass2').style.color='#435160';
+				  	}
+				  	else {
+				  		rupass2.style.borderBottom ='1px solid red';
+				  		document.getElementById('jspass2').style.color='#435160';
+				  	}
+
+
+				});
+
+			
+			
 				
 				document.getElementById("register_val").addEventListener("submit", function(event){
 				  
@@ -175,24 +237,42 @@ session_start();
 					if (runame==''){
 
 						document.getElementById('jsuser').style.color='#E4324C';
+						document.getElementById('unn').focus();
 						count++;
 					}
 					
 					if (rupass==''){
 
 						document.getElementById('jspass').style.color='#E4324C';
+						document.getElementById('upp').focus();
+						count++;
+					}
+					if (rupass.value.lenght < 8){
+
+						document.getElementById('pop').style.visibility='visible';
+		 				document.getElementById('pop').innerHTML ="passwd must be longer than 8 chars" ;
 						count++;
 					}
 					
 					if (rupass2==''){
 
 						document.getElementById('jspass2').style.color='#E4324C';
+						document.getElementById('upp2').focus();
+						count++;
+					}
+					if (rupass2.value !== rupass.value){
+
+						
+		 				document.getElementById('pop').style.visibility='visible';
+		 				document.getElementById('pop').innerHTML ="passwd doesnt match" ;
+							
 						count++;
 					}
 					
 					if (ruemail==''){
 
 						document.getElementById('jsemail').style.color='#E4324C';
+						document.getElementById('umail').focus();
 						count++;
 					}
 					
@@ -292,16 +372,19 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 	}
 	else {
 
-		 // if (strlen($password) < 8) {
+		  if (strlen($_POST['password']) < 8) {
 
 	 		 
 
-	 	// 	 $error[1]= "please choose a long pass more than 8 chars";
-	 	// 	$count++;
+	 	 	 $error[0]= " choose a long pass more than 8 chars";
+	 	 	$count++;
 
-			// }
+			 }
+			 else {
+			 	$password=test_input($_POST['password']);
+			 }
 		
-				$password=test_input($_POST['password']);
+				
 				
 			
 
@@ -323,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['register'])){
 	}
 	if ($password !== $password2){
 
-		$error[4]= "password does'nt match";
+		$error[1]= "password doesnt match";
 		$count++;
 		
 	}

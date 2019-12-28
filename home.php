@@ -1,17 +1,50 @@
-
- <?php 
-
- 	 session_start();
- 	 session_regenerate_id(); //to prevent session fixation
+<?php 
+@ob_start();
+session_start();
+session_regenerate_id(); //to prevent session fixation
  	
 
  	  if (!isset($_SESSION['username']) ){
- 	 		header('location:index.php');
- 	 		exit(); 
+ 	 		if (headers_sent()) {
+    		die("Redirect failed. ");
+				}
+		else{
+   			 exit(header('location:index.php'));
+			} 
  	 		/*use exit or die to stop executing the page  
  	 		  because if i use curl <url> command it will display the page
  	 		  so to prevent that use exit or die after the redirect */
  	  }
+
+ 	  $time = $_SERVER['REQUEST_TIME'];
+		
+
+		/**
+		* for a 15 minute timeout, specified in seconds
+		*/
+		$timeout_duration = 900;
+
+		/**
+		* Here we look for the user's LAST_ACTIVITY timestamp. If
+		* it's set and indicates our $timeout_duration has passed,
+		* remove previous $_SESSION data and start a new one.
+		*/
+		if (isset($_SESSION['LAST_ACTIVITY']) && 
+		   ($time - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+		    session_unset();
+		    session_destroy();
+		    echo "<script>window.location='index.php'</script>";
+		    
+		}
+
+		/**
+		* Finally, update LAST_ACTIVITY so that our timeout
+		* is based on it and not the user's login time.
+		*/
+		$_SESSION['LAST_ACTIVITY'] = $_SERVER['REQUEST_TIME'];
+
+		
+
  	require 'db_connection.php';
  /*
 	if (!header("referrer:index.php")){
@@ -20,8 +53,6 @@
 	} */
 
 ?> 
-
-<!DOCTYPE html >
 <html>
 	<head lang="en-us">
 		<title>Flagx</title>
@@ -86,6 +117,18 @@
 									$num_of_rows=mysqli_affected_rows($conn);
 									
 										$row=mysqli_fetch_assoc($query);
+										if ($row['job']==''){
+											$row['job']="Not stated";
+										}
+										if ($row['age']==''){
+											$row['age']=0;
+										}
+										if ($row['picture']==''){
+											$row['picture']="images/download.png";
+										}
+										if ($row['relationship']==''){
+											$row['relationship']="Not Stated";
+										}
 								echo "<img src=".$row['picture']." alt='profile picture' title='profile picture' />
 							<h3>". $_SESSION['username'] ."</h3>
 							<p>".$row['job']."</p>
@@ -132,7 +175,7 @@
 						<p>welcome</p>
 						<p><?php echo $_SESSION['username'] ;?></p>
 						<p>to flagx</p>
-						<a href="edit.php" target="_blank">edit your profile</a>
+						<a href="edit.php" target="_self">edit your profile</a>
 					</section>
 					<section class="ads">
 						<div  class="chat_header">
@@ -155,9 +198,13 @@
 			<script src="js/jquery.js"></script>
 			<script>
 				
-					/*function like (){
+					function like (){
+
 						var like=document.getElementById('lk').value;
-						
+						var pid=document.getElementById('pidd').value;
+						console.log(like);
+						console.log(pid);
+
 						var xhttp = new XMLHttpRequest();
 				 		 xhttp.onreadystatechange = function() {
 				    if (this.readyState == 4 && this.status == 200) {
@@ -168,7 +215,8 @@
 				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 				  xhttp.send(); 
 
-							}*/
+							}
+
 				function chat() {
 				  
 				  
@@ -203,7 +251,7 @@
 				 xhttp.open("GET", "chat.php?post="+post+"&share=send", true);
 				  xhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
 				  xhttp.send(); 
-				  document.getElementById('message').reset();
+				  document.getElementById('firstform').reset();
 				}
 
 
@@ -236,7 +284,7 @@
 				$(document).ready(function(e) {
 
 					$.ajaxSetup({cache:false});
-					setInterval( function() { $('#main').load('logs.php'); }, 500);
+					setInterval( function() { $('#main').load('logs.php'); }, 1000);
 					setInterval( function() { $('#chat_body').load('logs_chat.php'); }, 500);
 
 					
@@ -247,18 +295,3 @@
 			</script>
 	</body>
 </html>
-
-<?php 
-
-
-
-
-
-
-	
-
-
-
-
-
-?>

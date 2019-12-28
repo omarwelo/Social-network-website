@@ -1,26 +1,55 @@
+<?php 
+@ob_start();
+session_start();
+session_regenerate_id(); //to prevent session fixation
+ 	
 
+ 	  if (!isset($_SESSION['username']) ){
 
- <?php 
-
- 	 session_start();
- 	 session_regenerate_id(); 
- 	  if (!isset($_SESSION['username'])){
- 	 		header('location:index.php');
- 	 		exit; 
+ 	  	if (headers_sent()) {
+    		die("Redirect failed. Please click on this link: <a href=...>");
+				}
+		else{
+   			 exit(header('location:index.php'));
+			}
+ 	 		 
  	 		/*use exit or die to stop executing the page  
  	 		  because if i use curl <url> command it will display the page
  	 		  so to prevent that use exit or die after the redirect */
  	  }
- 	require 'db_connection.php';
+ 	  $time = $_SERVER['REQUEST_TIME'];
+		
+
+		/**
+		* for a 15 minute timeout, specified in seconds
+		*/
+		$timeout_duration = 900;
+
+		/**
+		* Here we look for the user's LAST_ACTIVITY timestamp. If
+		* it's set and indicates our $timeout_duration has passed,
+		* remove previous $_SESSION data and start a new one.
+		*/
+		if (isset($_SESSION['LAST_ACTIVITY']) && 
+		   ($time - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+		    session_unset();
+		    session_destroy();
+		    echo "<script>window.location='index.php'</script>";
+		    
+		}
+
+		/**
+		* Finally, update LAST_ACTIVITY so that our timeout
+		* is based on it and not the user's login time.
+		*/
+		$_SESSION['LAST_ACTIVITY'] = $_SERVER['REQUEST_TIME'];
+ 	
  /*
 	if (!header("referrer:index.php")){
 			
 			header("location:index.php");
 	} */
-
 ?> 
-
-<!DOCTYPE html >
 <html>
 	<head lang="en-us">
 		<title>Flagx</title>
@@ -80,12 +109,26 @@
 						<div class="empty"></div>
 						<div class="photo">
 								<?php
+								require 'db_connection.php';
+
 						$sessionk=$_SESSION['username'];
 								$sql ="SELECT * FROM users WHERE `users`.`username` = '$sessionk'";
 									$query=mysqli_query($conn,$sql);
 									$num_of_rows=mysqli_affected_rows($conn);
 									
 										$row=mysqli_fetch_assoc($query);
+										if ($row['job']==''){
+											$row['job']="Not stated";
+										}
+										if ($row['age']==''){
+											$row['age']="NS";
+										}
+										if ($row['picture']==''){
+											$row['picture']="images/download.png";
+										}
+										if ($row['relationship']==''){
+											$row['relationship']="Not Stated";
+										}
 								echo "<img src=".$row['picture']." alt='profile picture' title='profile picture' />
 							<h3>". $_SESSION['username'] ."</h3>
 							<p>".$row['job']."</p>
@@ -122,12 +165,18 @@
 						{
 							$row=mysqli_fetch_assoc($query);
 
+							$sqll ="SELECT * FROM users WHERE username='$sessionk'";
+							$queryy=mysqli_query($conn,$sqll);
+							$roww=mysqli_fetch_assoc($queryy);
+							if ($roww['picture']==''){
+								$roww['picture']="images/download.png";
+							}
 							echo "
 
 							<section>
 								<div class='post'>
 									<div class='time_post'>
-										<img src='images/download.png' alt='profile photo' title='profile photo' />
+										<img src='".$roww['picture']."' alt='profile photo' title='profile photo' />
 										<p class='editp'>".$row['username']."</p>
 										<p class='edittime'>".$row['post_time']."</p>
 									</div>
@@ -203,11 +252,7 @@
 			</script>
 	</body>
 </html>
-
 <?php 
-		
-		
-
 		if (isset($_POST['share'])){
 
 				// validation function
@@ -248,12 +293,4 @@
 		 			$stmt->close();
 		 			$conn->close();	
 		}
-
-
-		
-
-		
-
-		
-
 ?>

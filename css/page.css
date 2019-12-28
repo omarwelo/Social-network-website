@@ -1,4 +1,4 @@
-* {
+		* {
 
 	box-sizing:border-box;
 	font-family: "Open Sans", sans-serif;
@@ -46,18 +46,22 @@ header .search form input[type="text"]{
     
     padding-left: 5%;
 }
-header .search form button{
+header .search form input[type="button"]{
+
 	 position:absolute;
 	 width:10%;
 	 left: 71%;
-    border: none;
-    border-radius: 7%;
+     border: none;
+     border-radius: 7%;
 	 height:53%;
-	 background-image: url("search.png");
-	 background-size: cover;
+	 
 }
 .overwride{
 	color:#E44D3A;
+	position:absolute;
+	left:401px;
+	top:16px;
+	cursor:pointer;
 }
 
 header nav {
@@ -100,12 +104,32 @@ header nav li:hover a{
 
 
 }
+#result {
+	display:none;
+	position:absolute;
+	width:410px;
+	max-height:200px;
+	top:37.5px;
+	left:297px;
+	background-color:#fff;
+	overflow: auto;
+	padding:10px;
+	z-index:99;
+	border:1px solid #F2F2F2;
+}
+
 .contain {
 	background-color:#F2F2F2;
 	width:100%;
 	
 
 }
+.wallpaper {
+
+		
+		background-size: 100% 114%;
+		height:360px;
+		}
 								/* WRAPPER STYLE  START   */
 .wrapper {
 	width:85%;
@@ -145,8 +169,8 @@ header nav li:hover a{
 }
 .wrapper .left > .info .photo img{
 	width:43%;
-	height: 50%;
-    margin-top: -44px;
+	 height: 73%;
+    margin-top: -60px;
     margin-left: 27%;
 	
 	
@@ -208,6 +232,22 @@ header nav li:hover a{
 	height:450px;
 	
 }
+.wrapper .left > .ads span{
+	color:#fff;
+	display: inline-block;
+	font-weight:bold;
+	font-size:3em;
+	padding-top:108%;
+	margin-left:-62%;
+	text-transform: uppercase;
+	transform: rotate(-69deg);
+	-webkit-transform: rotate(-69deg);
+	-moz-transform: rotate(-69deg);
+	-o-transform: rotate(-69deg);
+	text-shadow:5px 5px #000;
+	-moz-text-shadow:5px 5px #000;
+	
+}
 
 
 
@@ -221,7 +261,7 @@ header nav li:hover a{
 	
 	margin-right:5%;
 }
-.wrapper main >section{
+.wrapper main section{
 	width:100%;
 	background-color:#fff;
 	height:200px;
@@ -232,16 +272,16 @@ header nav li:hover a{
 	-webkit-box-shadow: 5px 5px 5px rgba(var(--b6a,219,219,219),1) ,-5px 5px 5px rgba(var(--b6a,219,219,219),1);
 	-moz-box-shadow: 5px 5px 5px rgba(var(--b6a,219,219,219),1) ,-5px 5px 5px rgba(var(--b6a,219,219,219),1);
 }
-.wrapper main >section .post{
+.wrapper main section .post{
 	height:80%;
 
 	overflow:hidden;
 }
-.wrapper main >section .time_post{
+.wrapper main  section .time_post{
 	height:30%;
 	overflow: hidden;
 }
-.wrapper main >section .editp{
+.wrapper main  section .editp{
 	margin-top:5px;
 }
 .wrapper .post  .comment{
@@ -249,35 +289,43 @@ header nav li:hover a{
     padding: 20px 20px 5px 30px;
 	overflow-y:auto;
 }
-.wrapper main >section .time_post img{
+.wrapper main section .time_post img{
     width: 10%;
     border: 1px solid #fff;
     border-radius: 50%;
-    height: 94%;
+    height: 100%;
     margin-left: 3%;
     margin-top: 4px;
 
     display: block;
     float: left;
 }
-.wrapper main >section .time_post p{
+.wrapper main section .time_post p{
 	color:#90949c;
 	margin-left: 83px;
-	 margin-left: 2%;
+	 
     
 }
-.wrapper main >section .likes{
-	height:20%;
+.wrapper main section  .edittime{
+
+    line-height: 0px;
+    margin-top: -7px;
 }
-.wrapper main >section .likes{
+.wrapper main section .likes{
 	height:20%;
+	position: relative;
 }
-.wrapper main >section .likes .bt_like{
+#nblike{
+	position: absolute;
+	top: 0;
+	left: 90%;
+}
+.wrapper main section .likes .bt_like{
 	height:100%;
 	width:30%;
 	position:relative;
 }
-.wrapper main >section .likes .bt_like button{
+.wrapper main section .likes .bt_like button{
 	height:80%;
 	width:60%;
 	background-color: #E44D3A;
@@ -328,7 +376,7 @@ header nav li:hover a{
 								/* WRAPPER RIGHT SECTION STYLE  START   */
 .wrapper .right{
 	width:22.5%;
-	float:left;
+	float:right;
 }
 .wrapper .right >.top_right{
 		margin-bottom:10%;
@@ -364,5 +412,99 @@ header nav li:hover a{
 .wrapper .right >.ads{
 		width:100%;
 		height:350px;
+		background-color:#fff;
+		box-shadow: 5px 5px 5px rgba(var(--b6a,219,219,219),1) ,-5px 5px 5px rgba(var(--b6a,219,219,219),1);
+	  	-moz-box-shadow: 5px 5px 5px rgba(var(--b6a,219,219,219),1) ,-5px 5px 5px rgba(var(--b6a,219,219,219),1);
+	  	-webkit-box-shadow: 5px 5px 5px rgba(var(--b6a,219,219,219),1) ,-5px 5px 5px rgba(var(--b6a,219,219,219),1);
+}
+.game  {
+	padding:2% ;
+	
+}
+.game a {
+		text-decoration: none;
+		text-transform: capitalize;
+		margin: 0 auto;
+		color:#fff;
+		display: block;
+		width: 55%;
+		height: 34px;
 		background-color:#E44D3A;
+		text-align: center;
+		line-height: 28px;
+		border-radius:2px;
+		transition:all 0.5s ease-in-out;
+		
+}
+.game a:hover {
+	background-color:#b3483a;
+
+}
+.game p {
+	padding:2% ;
+	text-indent:10px;
+	text-align:center;
+}
+.game h4 {
+	color:#E44D3A;
+	text-align:center;
+	font-weight:600;
+	text-transform: uppercase;
+}
+
+.wrapper .right >.ads .chat_header{
+		width:100%;
+		height:15%;
+		border-bottom:3px solid #E44D3A;
+}
+.wrapper .right >.ads .chat_header h3{
+	text-align:center;
+	font-weight: bold;
+	line-height: 1.8em;
+}
+
+.wrapper .right >.ads .chat_body{
+		width:100%;
+		height:65%;
+		padding:10px;
+		overflow-y:auto;
+		
+}
+.chat_body::-webkit-scrollbar {
+  width: 5px;
+  cursor:pointer;
+  
+}
+
+/* Track */
+.chat_body::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius:20%;
+}
+ 
+/* Handle */
+.chat_body::-webkit-scrollbar-thumb {
+  background: #E44D3A; 
+  cursor:pointer;
+  border-radius:20%;
+}
+
+/* Handle on hover */
+.chat_body::-webkit-scrollbar-thumb:hover {
+  
+}
+.wrapper .right >.ads .chat_body span{
+		color:#E44D3A;
+		font-weight:bold;
+		
+}
+.wrapper .right >.ads .chat_messages{
+		width:100%;
+		height:20%;
+		border-top:1px solid #E44D3A;
+		
+}
+.wrapper .right >.ads .chat_messages form textarea{
+		outline:none;
+		resize:none;
 }

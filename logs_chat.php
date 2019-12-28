@@ -1,7 +1,7 @@
 <?php 
-	//ajax chat 
-	require 'db_connection.php';
-	$q ="SELECT * FROM chat ORDER BY message_date DESC";
+//ajax chat 
+require 'db_connection.php';
+$q ="SELECT * FROM chat ORDER BY message_id DESC";
 								$query=mysqli_query($conn,$q);
 								$num_of_rows=mysqli_affected_rows($conn);
 									

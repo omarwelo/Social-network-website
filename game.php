@@ -1,3 +1,15 @@
+<?php 
+   @ob_start();
+   session_start();
+   session_regenerate_id(); //to prevent session fixation
+if (!isset($_SESSION['username']) ){
+      echo "<h1 style='text-align:center;font-weight:bold;font-size:50px'>Forbidden</h1> " ."<hr>"."<p style='text-align:center'>you Cannot Access This Page</p>";
+      exit(); 
+      /*use exit or die to stop executing the page  
+        because if i use curl <url> command it will display the page
+        so to prevent that use exit or die after the redirect */
+    }
+?>
 <html>
 <head>
   <title></title>

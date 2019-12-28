@@ -1,13 +1,15 @@
-
 <?php 
-	session_start();
-	session_regenerate_id(); //to prevent session fixation
-	if (!isset($_SESSION['username'])){
-		header('location:index.php');
-		exit;
-	}
+@ob_start();
+session_start();
+session_regenerate_id(); //to prevent session fixation
+ 
+ 	  if (!isset($_SESSION['username']) ){
+ 	 		exit(header('location:index.php'));
+ 	 		/*use exit or die to stop executing the page  
+ 	 		  because if i use curl <url> command it will display the page
+ 	 		  so to prevent that use exit or die after the redirect */
+ 	  }
 ?>
-
 <html>
 	<head>
 		<title>FlagX</title>
@@ -105,7 +107,7 @@
 					<div class="design">
 						<label for="rel">update your martial status:</label>
 						<select id="rel" name="relationship">
-							<option value="none">your martial status</option>
+							<option value="">your martial status</option>
 							<option value="single">single</option>
 							<option value="married">Married</option>
 							<option value="divorsed">divorsed</option>
@@ -134,13 +136,7 @@
 
 	</body>
 </html>
-
-
-
-
-
 <?php 
-
 	if(isset($_POST['update'])){
 
 
@@ -346,9 +342,7 @@
 			mysqli_close($conn);
 
 			if ($count ==0){
-				header('location:home.php');
+				die(header('location:home.php'));
 			}
 	}
-
- 	
 ?>

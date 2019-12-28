@@ -29,8 +29,9 @@ header .logo {
 
 }
 @media (max-width:767px) {    /* for mobiles */ 
-	header .logo { 
-		margin-left: 22%;
+	header .logo {
+		text-align: center; 
+		margin: auto;
 
 	}
 
@@ -43,13 +44,18 @@ header .logo {
 	main section {display:none;}
 
 	main aside {
-		width:75%  !important;
+		width:90%  !important;
 		float:none !important;
 		margin:auto;
 
 	}
 	main aside .content > p{ 
 		margin-left:0%;
+		font-size:1em !important;
+	}
+	main aside  h2{ 
+		
+		font-size: 2em !important;
 	}
 
 
@@ -155,6 +161,14 @@ main aside .content > h2 {
 	top: 9px;
     left: 94%;
 }
+.checkn{
+	
+	display:inline-block;
+	position:absolute;
+	top: 9px;
+    left: 89%;
+    color:#1FCE6D;
+}
 .pass_icon{
 	
 	display:inline-block;
@@ -187,6 +201,7 @@ main aside .content > h2 {
 	padding:10px 5px 15px 20px;
 	width:100%;
 	color:#435160;
+	font-size: 1em;
 	color:#fff;
 	border-bottom:1px solid #435160;
 	transition:border 0.4s ease-in-out;
@@ -201,12 +216,18 @@ main aside .content > h2 {
 
 	border-bottom:1px solid #E4324C;
 }
+.login-form input[type="text"]:blur {
+
+
+	border-bottom:1px solid #435160;
+}
 .login-form input[type="email"] {
 	display:block;
 	background-color:transparent;
 	padding:10px 5px 15px 17px;
 	width:100%;
 	color:#435160;
+	font-size: 1em;
 	color:#fff;
 	border-bottom:1px solid #435160;
 	transition:border 0.4s ease-in-out;
@@ -214,7 +235,17 @@ main aside .content > h2 {
 }
 .login-form input[type="email"]:focus {
 
+	background-color:transparent;
+	border-bottom:1px solid #E4324C;
+}
+.login-form input[type="email"]:blur {
 
+
+	border-bottom:1px solid #435160;
+}
+.login-form input[type="email"]:active {
+
+	background-color:transparent;
 	border-bottom:1px solid #E4324C;
 }
 
@@ -224,6 +255,7 @@ main aside .content > h2 {
 	padding:15px 5px 15px 20px;
 	width:100%;
 	color:#435160;
+	font-size: 1em;
 	border-bottom:1px solid #435160;
 	transition:all 0.4s ease-in-out;
 	
@@ -231,6 +263,11 @@ main aside .content > h2 {
 .login-form input[type="password"]:focus {
 	border-bottom:1px solid #E4324C;
 
+}
+.login-form input[type="password"]:blur {
+
+
+	border-bottom:1px solid #435160;
 }
 ::placeholder {
   color: #435160;
@@ -297,7 +334,7 @@ main aside .content > h2 {
 
 }
 
-.login-form #reg-page {
+.login-form #reg_page {
 	
 	background-color:transparent;
 	color:#DC6180;
@@ -311,7 +348,7 @@ main aside .content > h2 {
 	transition:all 0.4s ease-in-out;
 
 }
-.login-form #reg-page:hover{
+.login-form #reg_page:hover{
 	color:#fff;
 	background-color:#DC6180;
 }
